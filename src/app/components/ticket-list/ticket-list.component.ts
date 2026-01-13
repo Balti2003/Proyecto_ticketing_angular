@@ -1,27 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Ticket } from '../../models/interfaces';
 import { TicketService } from '../../services/ticket.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './ticket-list.component.html',
 })
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
 
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.ticketService.getTickets().subscribe({
-      next: (res) => {
-        this.tickets = res.results || res;
+      next: (res: any) => {
+        this.tickets = [...res.results];
+
+        this.cdr.detectChanges();
+
       },
       error: (err) => {
         console.error('Error fetching tickets:', err);
-      },
+      }
     });
   }
 }
