@@ -1,0 +1,25 @@
+<div class="flex justify-center items-center">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Crear Cuenta</h2>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Nombre Completo</label>
+        <input type="text" formControlName="name" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 border-gray-300">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+        <input type="email" formControlName="email" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 border-gray-300">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Contraseña (min. 8 caracteres)</label>
+        <input type="password" formControlName="password" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 border-gray-300">
+      </div>
+      <button type="submit" [disabled]="signupForm.invalid" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50">
+        Registrarse
+      </button>
+    </form>
+    <p class="mt-4 text-center text-sm text-gray-600">
+      ¿Ya tienes cuenta? <a routerLink="/login" class="text-blue-600 hover:underline">Inicia sesión</a>
+    </p>
+  </div>
+</div>

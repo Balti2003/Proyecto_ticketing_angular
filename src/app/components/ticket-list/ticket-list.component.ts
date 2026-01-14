@@ -31,4 +31,19 @@ export class TicketListComponent implements OnInit {
       }
     });
   }
+
+  deleteTicket(id: string | undefined): void {
+    if (!id) return;
+
+    if (confirm('Are you sure you want to delete this ticket?')) {
+      this.ticketService.deleteTicket(id).subscribe({
+        next: () => {
+          this.tickets = this.tickets.filter(ticket => ticket.id !== id);
+        },
+        error: (err) => {
+          alert(err.error.message || 'Error deleting ticket');
+        }
+      });
+    }
+  }
 }
