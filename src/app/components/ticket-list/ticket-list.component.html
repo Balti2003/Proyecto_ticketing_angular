@@ -34,7 +34,8 @@
             class="text-blue-600 hover:text-blue-900 mr-3 font-medium">
             Editar
           </button>
-          <button 
+          <button
+            *ngIf="authService.getUserRole() === 'admin'"
             (click)="deleteTicket(ticket.id)"
             class="text-red-600 hover:text-red-900 font-medium transition-colors">
             Eliminar

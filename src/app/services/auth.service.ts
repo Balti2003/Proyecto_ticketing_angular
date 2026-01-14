@@ -14,6 +14,8 @@ export class AuthService {
             tap(response => {
                 if (response.token) {
                     localStorage.setItem("authToken", response.token);
+                    const payload = JSON.parse(atob(response.token.split('.')[1]));
+                    localStorage.setItem("userRole", payload.role);
                     localStorage.setItem("userId", response.userId);
                 }
             })
@@ -22,6 +24,10 @@ export class AuthService {
 
     getUserId() {
         return localStorage.getItem("userId");
+    }
+
+    getUserRole(): string | null {
+        return localStorage.getItem("userRole");
     }
 
     signup(userData: any) {
@@ -34,5 +40,7 @@ export class AuthService {
 
     logout() {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("userId");
     }
 }

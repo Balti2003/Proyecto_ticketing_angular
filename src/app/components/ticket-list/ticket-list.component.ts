@@ -3,6 +3,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Ticket } from '../../models/interfaces';
 import { TicketService } from '../../services/ticket.service';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -15,7 +16,8 @@ export class TicketListComponent implements OnInit {
 
   constructor(
     private ticketService: TicketService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class TicketListComponent implements OnInit {
       this.ticketService.deleteTicket(id).subscribe({
         next: () => {
           this.tickets = this.tickets.filter(ticket => ticket.id !== id);
+          alert('Ticket deleted successfully');
         },
         error: (err) => {
           alert(err.error.message || 'Error deleting ticket');
