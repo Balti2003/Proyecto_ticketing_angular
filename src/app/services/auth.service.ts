@@ -10,13 +10,18 @@ export class AuthService {
     constructor(private http: HttpClient) {}
 
     login(credentials: any) {
-        return this.http.post<AuthResponse>(`${this.API_URL}/login`, credentials).pipe(
+        return this.http.post<any>(`${this.API_URL}/login`, credentials).pipe(
             tap(response => {
                 if (response.token) {
                     localStorage.setItem("authToken", response.token);
+                    localStorage.setItem("userId", response.userId);
                 }
             })
         );
+    }
+
+    getUserId() {
+        return localStorage.getItem("userId");
     }
 
     signup(userData: any) {

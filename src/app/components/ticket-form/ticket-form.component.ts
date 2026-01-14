@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TicketService } from '../../services/ticket.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-ticket-form',
@@ -18,7 +19,8 @@ export class TicketFormComponent {
   constructor(
     private fb: FormBuilder,
     private ticketService: TicketService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.ticketForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
@@ -28,15 +30,18 @@ export class TicketFormComponent {
     });
   }
 
-  onSubmit(): void {
+  onSubmit() {
     if (this.ticketForm.valid) {
-      this.ticketService.createTicket(this.ticketForm.value).subscribe({
-        next: () => {
-          this.successMessage = 'Ticket created successfully';
-          setTimeout(() => this.router.navigate(['/tickets']), 2000);
-        },
+      const ticketData = {
+        ...this.ticketForm.value,
+        user: this.authService.getUserId()
+      };
+
+      this.ticketService.createTicket(ticketData).subscribe({
+        next: () => this.router.navigate(['/tickets']),
         error: (err) => {
-          this.errorMessage = err.error.message || 'Failed to create ticket';
+          this.errorMessage = err.error.message;
+          console.error("Error 400", err.error);
         }
       });
     }

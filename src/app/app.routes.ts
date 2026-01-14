@@ -3,11 +3,12 @@ import { LoginComponent } from './components/login/login.component';
 import { TicketListComponent } from './components/ticket-list/ticket-list.component';
 import { TicketFormComponent } from './components/ticket-form/ticket-form.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
-    { path: 'tickets', component: TicketListComponent },
-    { path: 'tickets/new', component: TicketFormComponent },
+    { path: 'tickets', component: TicketListComponent, canActivate: [authGuard] },
+    { path: 'tickets/new', component: TicketFormComponent, canActivate: [authGuard] },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
