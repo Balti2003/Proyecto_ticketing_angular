@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent {
   constructor(public authService: AuthService, private router: Router) {}
 
-  onLogout() {
+  logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }

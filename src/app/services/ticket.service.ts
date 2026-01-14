@@ -13,6 +13,11 @@ export class TicketService {
         return this.http.get<any>(this.API_URL);
     }
 
+    //GET /api/tickets/:id
+    getTicketById(id: string) {
+        return this.http.get<{ticket: Ticket}>(`${this.API_URL}/${id}`);
+    }
+
     //POST /api/tickets/
     createTicket(ticket: Ticket) {
         return this.http.post<{ticket: Ticket}>(this.API_URL, ticket);

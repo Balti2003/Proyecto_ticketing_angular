@@ -1,19 +1,18 @@
-<nav class="bg-blue-600 p-4 text-white shadow-lg">
+<nav class="bg-blue-600 p-4 text-white shadow-md">
   <div class="container mx-auto flex justify-between items-center">
-    <a routerLink="/" class="text-xl font-bold tracking-tight">Ticketing App</a>
+    <a routerLink="/" class="text-xl font-bold">Ticketing App</a>
     
-    <div class="space-x-4 flex items-center">
+    <div class="flex items-center space-x-4">
       <ng-container *ngIf="authService.getToken()">
-        <a routerLink="/tickets" class="hover:text-blue-200 transition">Mis Tickets</a>
-        <a routerLink="/tickets/new" class="hover:text-blue-200 transition">Nuevo Ticket</a>
-        <button (click)="onLogout()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm transition">
-          Cerrar Sesión
+        <a routerLink="/tickets" class="hover:text-blue-200">Ver Tickets</a>
+        <button (click)="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition">
+          Salir
         </button>
       </ng-container>
 
       <ng-container *ngIf="!authService.getToken()">
-        <a routerLink="/login" class="hover:text-blue-200 transition">Login</a>
-        <a routerLink="/signup" class="hover:text-blue-200 transition font-semibold">Registro</a>
+        <a routerLink="/login" class="hover:text-blue-200">Login</a>
+        <a routerLink="/signup" class="bg-white text-blue-600 px-3 py-1 rounded font-bold">Registro</a>
       </ng-container>
     </div>
   </div>
