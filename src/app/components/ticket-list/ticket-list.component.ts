@@ -82,6 +82,11 @@ export class TicketListComponent implements OnInit {
   async deleteTicket(id: string | undefined) {
     if (!id) return;
 
+    if (this.authService.getUserRole() !== 'admin') {
+      this.alertService.error('Acceso denegado. Solo los administradores pueden eliminar tickets.');
+      return;
+    }
+
     const result = await this.alertService.confirm(
       "Estas seguro?",
       "No podras revertir esto!"
@@ -93,7 +98,9 @@ export class TicketListComponent implements OnInit {
           this.tickets = this.tickets.filter(t => t.id !== id);
           this.alertService.success('El ticket ha sido eliminado.');
         },
-        error: (err) => this.alertService.error('No tienes permisos para eliminar.')
+        error: (err) => {
+          this.alertService.error(err.error.message || 'No tienes permisos para realizar esta acción');
+        }
       });
     }
   }

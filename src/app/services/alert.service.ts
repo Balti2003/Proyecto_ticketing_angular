@@ -20,6 +20,8 @@ export class AlertService {
       icon: 'error',
       title: 'Error',
       text: message,
+      confirmButtonColor: '#3b82f6',
+      confirmButtonText: 'Entendido',
     });
   }
 
