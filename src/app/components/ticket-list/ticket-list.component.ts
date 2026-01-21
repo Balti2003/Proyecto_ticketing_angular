@@ -15,6 +15,12 @@ import { FormsModule } from '@angular/forms';
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
 
+  //variables for pagination
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalTickets: number = 0;
+
+  //variables for filters
   searchTerm: string = '';
   statusFilter: string = '';
   priorityFilter: string = '';
@@ -29,17 +35,23 @@ export class TicketListComponent implements OnInit {
     this.loadTickets();
   }
 
-  loadTickets(): void {
+  loadTickets(page: number = 1): void {
+    this.currentPage = page;
+
     const filters = {
       search: this.searchTerm || undefined,
       status: this.statusFilter || undefined,
       priority: this.priorityFilter || undefined,
+      page: page
     };
 
     this.ticketService.getTickets(filters).subscribe({
       next: (res: any) => {
         this.tickets = [...res.results];
         this.cdr.detectChanges();
+        this.totalPages = res.pages;
+        this.totalTickets = res.total;
+        console.log("Cargada página:", res.currentPage);
       },
       error: (err) => {
         console.error('Error fetching tickets:', err);
@@ -52,6 +64,20 @@ export class TicketListComponent implements OnInit {
     this.statusFilter = '';
     this.priorityFilter = '';
     this.loadTickets();
+  }
+
+  nextPage(): void {
+    console.log('Intentando ir a la página:', this.currentPage + 1);
+    if (this.currentPage < this.totalPages) {
+      this.loadTickets(this.currentPage + 1);
+    }
+  }
+
+  prevPage(): void {
+    console.log('Intentando ir a la página:', this.currentPage - 1);
+    if (this.currentPage > 1) {
+      this.loadTickets(this.currentPage - 1);
+    }
   }
 
   deleteTicket(id: string | undefined): void {
