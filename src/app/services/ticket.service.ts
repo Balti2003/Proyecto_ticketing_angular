@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Ticket } from "../models/interfaces";
 
 @Injectable({ providedIn: "root" })
@@ -9,8 +9,17 @@ export class TicketService {
     constructor(private http: HttpClient) {}
 
     //GET /api/tickets/
-    getTickets() {
-        return this.http.get<any>(this.API_URL);
+    getTickets(filters?: any) {
+        let params = new HttpParams();
+
+        if (filters) {
+            if (filters.search) params = params.set("search", filters.search);
+            if (filters.status) params = params.set("status", filters.status);
+            if (filters.priority) params = params.set("priority", filters.priority);
+            if (filters.page) params = params.set("page", filters.page.toString());
+        }
+
+        return this.http.get<any>(this.API_URL, { params });
     }
 
     //GET /api/tickets/:id

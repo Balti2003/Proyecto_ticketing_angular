@@ -4,15 +4,20 @@ import { Ticket } from '../../models/interfaces';
 import { TicketService } from '../../services/ticket.service';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './ticket-list.component.html',
 })
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
+
+  searchTerm: string = '';
+  statusFilter: string = '';
+  priorityFilter: string = '';
 
   constructor(
     private ticketService: TicketService,
@@ -21,17 +26,32 @@ export class TicketListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ticketService.getTickets().subscribe({
+    this.loadTickets();
+  }
+
+  loadTickets(): void {
+    const filters = {
+      search: this.searchTerm || undefined,
+      status: this.statusFilter || undefined,
+      priority: this.priorityFilter || undefined,
+    };
+
+    this.ticketService.getTickets(filters).subscribe({
       next: (res: any) => {
         this.tickets = [...res.results];
-
         this.cdr.detectChanges();
-
       },
       error: (err) => {
         console.error('Error fetching tickets:', err);
       }
     });
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.statusFilter = '';
+    this.priorityFilter = '';
+    this.loadTickets();
   }
 
   deleteTicket(id: string | undefined): void {
