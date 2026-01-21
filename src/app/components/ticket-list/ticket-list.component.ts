@@ -5,6 +5,7 @@ import { TicketService } from '../../services/ticket.service';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -28,7 +29,8 @@ export class TicketListComponent implements OnInit {
   constructor(
     private ticketService: TicketService,
     private cdr: ChangeDetectorRef,
-    public authService: AuthService
+    public authService: AuthService,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +53,6 @@ export class TicketListComponent implements OnInit {
         this.cdr.detectChanges();
         this.totalPages = res.pages;
         this.totalTickets = res.total;
-        console.log("Cargada página:", res.currentPage);
       },
       error: (err) => {
         console.error('Error fetching tickets:', err);
@@ -67,32 +68,34 @@ export class TicketListComponent implements OnInit {
   }
 
   nextPage(): void {
-    console.log('Intentando ir a la página:', this.currentPage + 1);
     if (this.currentPage < this.totalPages) {
       this.loadTickets(this.currentPage + 1);
     }
   }
 
   prevPage(): void {
-    console.log('Intentando ir a la página:', this.currentPage - 1);
     if (this.currentPage > 1) {
       this.loadTickets(this.currentPage - 1);
     }
   }
 
-  deleteTicket(id: string | undefined): void {
+  async deleteTicket(id: string | undefined) {
     if (!id) return;
 
-    if (confirm('Are you sure you want to delete this ticket?')) {
+    const result = await this.alertService.confirm(
+      "Estas seguro?",
+      "No podras revertir esto!"
+    );
+
+    if (result.isConfirmed) {
       this.ticketService.deleteTicket(id).subscribe({
         next: () => {
-          this.tickets = this.tickets.filter(ticket => ticket.id !== id);
-          alert('Ticket deleted successfully');
+          this.tickets = this.tickets.filter(t => t.id !== id);
+          this.alertService.success('El ticket ha sido eliminado.');
         },
-        error: (err) => {
-          alert(err.error.message || 'Error deleting ticket');
-        }
+        error: (err) => this.alertService.error('No tienes permisos para eliminar.')
       });
     }
   }
 }
+

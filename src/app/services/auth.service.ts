@@ -30,6 +30,10 @@ export class AuthService {
         return localStorage.getItem("userRole");
     }
 
+    isAdmin(): boolean {
+        return this.getUserRole() === "admin";
+    }
+
     signup(userData: any) {
         return this.http.post<AuthResponse>(`${this.API_URL}/signup`, userData);
     }
