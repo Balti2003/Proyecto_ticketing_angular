@@ -26,12 +26,18 @@ export class TicketListComponent implements OnInit {
   statusFilter: string = '';
   priorityFilter: string = '';
 
+  //variables for onlyMyTickets filter
+  onlyMyTickets: boolean = false;
+  currentUserId: string | null = "";
+
   constructor(
     private ticketService: TicketService,
     private cdr: ChangeDetectorRef,
     public authService: AuthService,
     private alertService: AlertService
-  ) {}
+  ) {
+    this.currentUserId = this.authService.getUserId();
+  }
 
   ngOnInit(): void {
     this.loadTickets();
@@ -40,12 +46,20 @@ export class TicketListComponent implements OnInit {
   loadTickets(page: number = 1): void {
     this.currentPage = page;
 
-    const filters = {
+    const userId = this.authService.getUserId();
+    console.log('ID del usuario actual:', userId); // Para depurar
+    console.log('¿Filtrar solo mis tickets?:', this.onlyMyTickets);
+  
+    const filters: any = {
       search: this.searchTerm || undefined,
       status: this.statusFilter || undefined,
       priority: this.priorityFilter || undefined,
       page: page
     };
+
+    if (this.onlyMyTickets && userId) {
+      filters.user = userId;
+    }
 
     this.ticketService.getTickets(filters).subscribe({
       next: (res: any) => {
@@ -103,6 +117,11 @@ export class TicketListComponent implements OnInit {
         }
       });
     }
+  }
+
+  toggleMyTickets(): void {
+    this.onlyMyTickets = !this.onlyMyTickets;
+    this.loadTickets(1);
   }
 }
 

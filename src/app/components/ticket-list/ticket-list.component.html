@@ -31,6 +31,15 @@
       </select>
     </div>
 
+    <div class="flex items-end">
+      <button 
+        (click)="toggleMyTickets()"
+        [ngClass]="onlyMyTickets ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
+        class="w-full px-4 py-2 rounded-md text-sm font-bold transition-all duration-300 shadow-sm flex items-center justify-center">
+        <span class="mr-2">{{ onlyMyTickets ? '👤 Viendo Mis Tickets' : '👥 Viendo Todo' }}</span>
+      </button>
+    </div>
+
     <button (click)="clearFilters()" 
             class="bg-gray-100 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-200 text-sm font-medium transition">
       Limpiar Filtros

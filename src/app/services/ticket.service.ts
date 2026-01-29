@@ -17,6 +17,8 @@ export class TicketService {
             if (filters.status) params = params.set("status", filters.status);
             if (filters.priority) params = params.set("priority", filters.priority);
             if (filters.page) params = params.set("page", filters.page.toString());
+
+            if (filters.user) params = params.set("user", filters.user);
         }
 
         return this.http.get<any>(this.API_URL, { params });

@@ -14,15 +14,20 @@ export class AuthService {
             tap(response => {
                 if (response.token) {
                     localStorage.setItem("authToken", response.token);
+
                     const payload = JSON.parse(atob(response.token.split('.')[1]));
+
                     localStorage.setItem("userRole", payload.role);
-                    localStorage.setItem("userId", response.userId);
+                    
+                    localStorage.setItem("userId", payload._id);
+
+                    console.log('Datos guardados - Role:', payload.role, 'ID:', payload._id);
                 }
             })
         );
     }
 
-    getUserId() {
+    getUserId(): string | null {
         return localStorage.getItem("userId");
     }
 
