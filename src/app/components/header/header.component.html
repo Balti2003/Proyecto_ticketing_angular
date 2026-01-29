@@ -1,19 +1,42 @@
-<nav class="bg-blue-600 p-4 text-white shadow-md">
+<nav class="bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 p-4 text-white shadow-2xl border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
   <div class="container mx-auto flex justify-between items-center">
-    <a routerLink="/" class="text-xl font-bold">Ticketing App</a>
     
-    <div class="flex items-center space-x-4">
+    <a routerLink="/" class="flex items-center space-x-2 group transition-all duration-300">
+      <div class="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+        <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" />
+        </svg>
+      </div>
+      <span class="text-2xl font-black tracking-tighter uppercase group-hover:text-blue-200 transition-colors">
+        Ticket<span class="font-light">App</span>
+      </span>
+    </a>
+    
+    <div class="flex items-center space-x-6">
       <ng-container *ngIf="authService.getToken()">
-        <a routerLink="/tickets" class="hover:text-blue-200">Ver Tickets</a>
-        <a routerLink="/dashboard" class="hover:text-blue-200 transition">Dashboard</a>
-        <button (click)="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition">
+        <a routerLink="/tickets" 
+           class="text-sm font-semibold hover:text-blue-200 transition-all py-2 border-b-2 border-transparent hover:border-blue-200">
+           Tickets
+        </a>
+        <a routerLink="/dashboard" 
+           class="text-sm font-semibold hover:text-blue-200 transition-all py-2 border-b-2 border-transparent hover:border-blue-200">
+           Dashboard
+        </a>
+        <button (click)="logout()" 
+                class="bg-red-500/80 backdrop-blur-sm px-5 py-2 rounded-xl font-bold hover:bg-red-600 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-900/20 border border-red-400/30">
           Salir
         </button>
       </ng-container>
 
       <ng-container *ngIf="!authService.getToken()">
-        <a routerLink="/login" class="hover:text-blue-200">Login</a>
-        <a routerLink="/signup" class="bg-white text-blue-600 px-3 py-1 rounded font-bold">Registro</a>
+        <a routerLink="/login" 
+           class="text-sm font-semibold hover:text-blue-200 transition-all">
+           Iniciar Sesión
+        </a>
+        <a routerLink="/signup" 
+           class="bg-white text-blue-800 px-6 py-2 rounded-xl font-extrabold hover:bg-blue-50 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-md">
+           Crear Cuenta
+        </a>
       </ng-container>
     </div>
   </div>
