@@ -1,18 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TicketService } from '../../services/ticket.service';
 import { Ticket } from '../../models/interfaces';
+import { CommentService } from '../../services/comment.service';
 
 @Component({
   selector: 'app-ticket-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, FormsModule],
   templateUrl: './ticket-edit.component.html',
 })
 export class TicketEditComponent implements OnInit {
+  comments: any[] = [];
+  newCommentText: string = '';
   editForm: FormGroup;
   ticketId: string = '';
   errorMessage: string = '';
@@ -22,7 +25,8 @@ export class TicketEditComponent implements OnInit {
     private route: ActivatedRoute,
     private ticketService: TicketService,
     private authService: AuthService,
-  private router: Router
+    private router: Router,
+    private commentService: CommentService
   ) {
     this.editForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -35,6 +39,7 @@ export class TicketEditComponent implements OnInit {
   ngOnInit(): void {
     //obtenemos id de la url
     this.ticketId = this.route.snapshot.paramMap.get('id') || '';
+    this.loadComments();
 
     if (this.ticketId) {
       this.ticketService.getTicketById(this.ticketId).subscribe({
@@ -49,6 +54,28 @@ export class TicketEditComponent implements OnInit {
         error: (err) => this.errorMessage = err.error.message || 'Error loading ticket',
       });
     }
+  }
+
+  loadComments() {
+    this.commentService.getCommentsByTicket(this.ticketId).subscribe({
+      next: (res) => this.comments = res,
+      error: (err) => console.error('Error loading comments', err),
+    });
+  }
+
+  sendComment() {
+    if (!this.newCommentText.trim()) {
+      return;
+    }
+
+    this.commentService.addComment(this.ticketId, this.newCommentText).subscribe({
+      next: (comment) => {
+        this.comments.push(comment);
+        this.newCommentText = '';
+        this.loadComments();
+      },
+      error: (err) => console.error('Error adding comment', err),
+    });
   }
 
   onSubmit() {

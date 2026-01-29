@@ -123,5 +123,15 @@ export class TicketListComponent implements OnInit {
     this.onlyMyTickets = !this.onlyMyTickets;
     this.loadTickets(1);
   }
+
+  isUrgentAndOld(ticket: any): boolean {
+    if (!ticket.createdAt || ticket.priority !== 'high' || ticket.status === 'closed') return false;
+
+    const createdDate = new Date(ticket.createdAt).getTime();
+    const now = new Date().getTime();
+    const hoursPassed = (now - createdDate) / (1000 * 60 * 60);
+
+    return hoursPassed > 24;
+  }
 }
 
