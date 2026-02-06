@@ -52,11 +52,5 @@ Este frontend está diseñado para conectarse a una **REST API** desarrollada en
     ```
 4.  Abrir el navegador en `http://localhost:4200`.
 
-## 📸 Capturas del Proyecto
-
-| Vista de Lista | Detalle de Ticket |
-| :--- | :--- |
-| ![Listado Premium](https://via.placeholder.com/400x250?text=Ticket+List+Premium) | ![Timeline Comentarios](https://via.placeholder.com/400x250?text=Comment+Timeline) |
-
 ---
 Desarrollado por Balti2003
