@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Ticket } from "../models/interfaces";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class TicketService {
@@ -42,5 +43,10 @@ export class TicketService {
     //DELETE /api/tickets/:id
     deleteTicket(id: string) {
         return this.http.delete(`${this.API_URL}/${id}`);
+    }
+
+    //PATCH /api/tickets/:id/status
+    updateTicketStatus(id: string, status: string): Observable<any> {
+        return this.http.put<any>(`${this.API_URL}/${id}`, { status });
     }
 }

@@ -48,4 +48,16 @@ export class TicketDetailComponent implements OnInit {
       this.newCommentText = '';
     });
   }
-}
+
+  changeStatus(newStatus: string) {
+    this.ticketService.updateTicketStatus(this.ticketId, newStatus).subscribe({
+      next: (res) => {
+        this.ticket.status = newStatus;
+        this.commentService.addComment(this.ticketId, `Status changed to ${newStatus}`).subscribe(newComment => {
+          this.comments.push(newComment);
+        });
+      },
+      error: (err) => console.error('Error changing status', err),
+    });
+  }
+} 

@@ -75,10 +75,10 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-50">
-        <tr *ngFor="let ticket of tickets"
+        <tr *ngFor="let ticket of tickets" [routerLink]="['/tickets/detail', ticket.id]"
             [ngClass]="{'bg-red-50/50 border-l-4 border-red-500 shadow-inner': isUrgentAndOld(ticket)}"
             class="group hover:bg-blue-50/30 transition-all duration-300">
-          <td class="px-8 py-5" [routerLink]="['/tickets/detail', ticket.id]">
+          <td class="px-8 py-5">
             <div class="text-sm font-bold text-gray-800 group-hover:text-blue-700 transition-colors">{{ ticket.title }}</div>
             <div class="text-[10px] text-gray-400 font-mono mt-1">Ref: #{{ ticket.id?.substring(0,8) }}</div>
           </td>
