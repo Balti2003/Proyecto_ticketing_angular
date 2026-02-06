@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
+import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -34,7 +35,8 @@ export class TicketListComponent implements OnInit {
     private ticketService: TicketService,
     private cdr: ChangeDetectorRef,
     public authService: AuthService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private excelService: ExcelService
   ) {
     this.currentUserId = this.authService.getUserId();
   }
@@ -132,6 +134,24 @@ export class TicketListComponent implements OnInit {
     const hoursPassed = (now - createdDate) / (1000 * 60 * 60);
 
     return hoursPassed > 24;
+  }
+
+  downloadReport(): void {
+    if (!this.tickets || this.tickets.length === 0) {
+      alert('No hay datos para exportar');
+      return;
+    }
+
+    const dataToExport = this.tickets.map(t => ({
+      'Referencia': t.id?.substring(0, 8),
+      'Título': t.title,
+      'Prioridad': t.priority?.toUpperCase(),
+      'Estado': t.status?.toUpperCase(),
+      'Fecha de Creación': t.createdAt ? new Date(t.createdAt).toLocaleDateString() : 'N/A',
+      'Descripción': t.description
+    }));
+
+    this.excelService.exportToExcel(dataToExport, 'Reporte_Tickets');
   }
 }
 
